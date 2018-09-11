@@ -1,0 +1,13 @@
+{
+  "name": "react-ratzard",
+  "version": "0.1.0",
+  "description": "A simple wizard manager for react",
+  "main": "index.js",
+  "repository": "https://github.com/FuelRats/react-ratzard.git",
+  "author": "UncleClapton",
+  "license": "BSD-3-Clause",
+  "private": false,
+  "dependencies": {
+    "react": "^16.5.0"
+  }
+}
