@@ -51,7 +51,13 @@ export class Wizard extends Component {
     Public Methods
   \***************************************************************************/
 
-  setStep = (stepId, newState) => {
+  componentDidMount () {
+    const { defaultStep } = this.props
+
+    this.setStep(defaultStep || this.steps[0])
+  }
+
+  setStep = (stepId, newState = {}) => {
     const {
       onStepChange,
     } = this.props
@@ -62,9 +68,9 @@ export class Wizard extends Component {
         ...state.wizardState,
         ...newState,
       },
-    }), reallyNewState => {
+    }), () => {
       if (onStepChange) {
-        onStepChange(reallyNewState.wizardState)
+        onStepChange(this.state.wizardState)
       }
     })
   }
@@ -77,6 +83,20 @@ export class Wizard extends Component {
         {children}
       </Provider>
     )
+  }
+
+
+
+
+
+  /***************************************************************************\
+    Getters
+  \***************************************************************************/
+
+  get steps () {
+    const { children } = this.props
+
+    return React.Children.map(children, ({ props: { id } }, index) => id || index)
   }
 }
 
@@ -112,6 +132,10 @@ export class Step extends Component {
       render,
     } = this.props
 
+    const renderChildProps = { ...childProps }
+    delete renderChildProps.setStep
+    delete renderChildProps.wizardState
+
     return React.Children.map(children, child => {
       if (typeof child === 'function') {
         return child(childProps)
@@ -121,7 +145,7 @@ export class Step extends Component {
         return render(childProps)
       }
 
-      return React.cloneElement(child, { ...childProps })
+      return React.cloneElement(child, renderChildProps)
     })
   }
 
