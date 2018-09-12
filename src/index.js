@@ -20,7 +20,7 @@ const {
 
 
 
-export class Wizard extends Component {
+class Wizard extends Component {
   /***************************************************************************\
     Local Properties
   \***************************************************************************/
@@ -98,7 +98,7 @@ export class Wizard extends Component {
 
 
 
-export class Step extends Component {
+class InternalStep extends Component {
   /***************************************************************************\
     Local Properties
   \***************************************************************************/
@@ -150,13 +150,25 @@ export class Step extends Component {
   /***************************************************************************\
     Public Methods
   \***************************************************************************/
-  render () {
-    const { id } = this.props
 
-    return (
-      <Consumer>
-        {({ currentStep, ...childProps }) => (currentStep === id) ? this._renderChildren(childProps) : null}
-      </Consumer>
-    )
+  render () {
+    const { id, currentStep } = this.props
+    return (currentStep === id) ? this._renderChildren(childProps) : null}
   }
+}
+
+const Step = props => (
+  <Consumer>
+    {(WizardContext) => (
+      <InternalStep {{
+        ...props,
+        ...WizardContext,
+      }} />
+    )}
+  </Consumer>
+)
+
+export {
+  Wizard,
+  Step,
 }
