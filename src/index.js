@@ -161,11 +161,7 @@ export class Step extends Component {
 
     return (
       <Consumer>
-        {({ currentStep, ...childProps }) => (
-          <div hidden={currentStep !== id}>
-            {this._renderChildren(childProps)}
-          </div>
-        )}
+        {({ currentStep, ...childProps }) => this._renderChildren(childProps)}
       </Consumer>
     )
   }
