@@ -155,7 +155,7 @@ export class Step extends Component {
 
     return (
       <Consumer>
-        {({ currentStep, ...childProps }) => this._renderChildren(childProps)}
+        {({ currentStep, ...childProps }) => (currentStep === id) ? this._renderChildren(childProps) : null}
       </Consumer>
     )
   }
