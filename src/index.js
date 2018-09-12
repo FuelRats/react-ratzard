@@ -37,7 +37,7 @@ export class Wizard extends Component {
 
   /* eslint-disable react/no-unused-state */
   state = {
-    currentStep: 0,
+    currentStep: this.props.defaultStep || this.steps[0],
     wizardState: {},
     setStep: this.setStep,
   }
@@ -50,12 +50,6 @@ export class Wizard extends Component {
   /***************************************************************************\
     Public Methods
   \***************************************************************************/
-
-  componentDidMount () {
-    const { defaultStep } = this.props
-
-    this.setStep(defaultStep || this.steps[0])
-  }
 
   setStep = (stepId, newState = {}) => {
     const {
