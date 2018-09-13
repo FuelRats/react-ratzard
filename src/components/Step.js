@@ -13,7 +13,7 @@ import { Consumer } from './Context'
 
 
 
-export class Step extends Component {
+export class InternalStep extends Component {
   /***************************************************************************\
     Local Properties
   \***************************************************************************/
@@ -35,19 +35,18 @@ export class Step extends Component {
     Private Methods
   \***************************************************************************/
 
-  _renderChildren (childProps) {
+  _renderChildren () {
     const {
       children,
-      id,
       render,
     } = this.props
 
     if (render) {
-      return render(childProps)
+      return render(this.props)
     }
 
     if (typeof children === 'function') {
-      return child(childProps)
+      return child(this.props)
     }
 
     return children
@@ -61,13 +60,34 @@ export class Step extends Component {
     Public Methods
   \***************************************************************************/
 
-  render () {
-    const { id } = this.props
+  constructor (props) {
+    super(props)
 
-    return (
-      <Consumer>
-        {({ currentStep, ...childProps }) => (currentStep === id) ? this._renderChildren(childProps) : null}
-      </Consumer>
-    )
+    const {
+      addStep,
+      id,
+    } = props
+
+    addStep(id)
+  }
+
+  render () {
+    const { id, currentStep } = this.props
+
+    return (currentStep === id) ? this._renderChildren() : null
   }
 }
+
+
+
+
+
+export const Step = props => (
+  <Consumer>
+    {(WizardContext) => (
+      <InternalStep
+        {...props}
+        {...WizardContext} />
+    )}
+  </Consumer>
+)
