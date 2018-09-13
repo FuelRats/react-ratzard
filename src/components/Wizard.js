@@ -53,11 +53,11 @@ export class Wizard extends Component {
     } = this.props
 
     if (render) {
-      return render(this.state)
+      return render(this.passthroughState)
     }
 
     if (typeof children === 'function') {
-      return children(this.state)
+      return children(this.passthroughState)
     }
 
     return children
@@ -90,15 +90,17 @@ export class Wizard extends Component {
 
       return {
         hasNextStep: wizardHasMoreThanOneStep && !currentStepIsLastStep,
-        hasPreviousStep: wizardHasMoreThanOneStep && currentStepIsFirstStep,
+        hasPreviousStep: wizardHasMoreThanOneStep && !currentStepIsFirstStep,
         steps: newSteps,
       }
     })
   }
 
   nextStep = () => {
-    const { steps } = this
-    const { currentStep } = this.props
+    const {
+      steps,
+      currentStep,
+    } = this.state
 
     const currentStepIndex = steps.indexOf(currentStep)
 
@@ -106,8 +108,10 @@ export class Wizard extends Component {
   }
 
   previousStep = () => {
-    const { steps } = this
-    const { currentStep } = this.props
+    const {
+      steps,
+      currentStep,
+    } = this.state
 
     const currentStepIndex = steps.indexOf(currentStep)
 
@@ -115,16 +119,8 @@ export class Wizard extends Component {
   }
 
   render () {
-    const providerValue = {
-      ...this.state,
-      addStep: this.addStep,
-      nextStep: this.nextStep,
-      previousStep: this.previousStep,
-      setStep: this.setStep,
-    }
-
     return (
-      <Provider value={providerValue}>
+      <Provider value={this.passthroughState}>
         {this._renderChildren()}
       </Provider>
     )
@@ -134,17 +130,42 @@ export class Wizard extends Component {
     const {
       onStepChange,
     } = this.props
+    const {
+      steps,
+    } = this.state
+
+    const wizardHasMoreThanOneStep = steps.length > 1
+    const currentStepIsFirstStep = stepID === steps[0]
+    const currentStepIsLastStep = stepID === steps[steps.length - 1]
 
     this.setState(state => ({
       currentStep: stepID,
+      hasNextStep: wizardHasMoreThanOneStep && !currentStepIsLastStep,
+      hasPreviousStep: wizardHasMoreThanOneStep && !currentStepIsFirstStep,
       wizardState: {
         ...state.wizardState,
         ...newState,
       },
     }), () => {
-      if (onStepChange) {
-        onStepChange(this.state.wizardState)
-      }
+      onStepChange(this.state.wizardState)
     })
+  }
+
+
+
+
+
+  /***************************************************************************\
+    Getters
+  \***************************************************************************/
+
+  get passthroughState () {
+    return {
+      ...this.state,
+      addStep: this.addStep,
+      nextStep: this.nextStep,
+      previousStep: this.previousStep,
+      setStep: this.setStep,
+    }
   }
 }
