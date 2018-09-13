@@ -20,11 +20,15 @@ const App = () => (
       <React.Fragment>
         <div>
           <Step id="foo">
-            <span>Foo</span>
+            <span>Step 1: Foo</span>
           </Step>
 
           <Step id="bar">
-            <span>Bar</span>
+            <span>Step 2: Bar</span>
+          </Step>
+
+          <Step id="baz">
+            <span>Step 3: Baz</span>
           </Step>
         </div>
 
