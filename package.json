@@ -2,20 +2,24 @@
   "name": "react-ratzard",
   "version": "0.1.0",
   "description": "A simple wizard manager for react",
-  "main": "index.js",
+  "main": "dist/index.js",
   "repository": "https://github.com/FuelRats/react-ratzard.git",
   "author": "UncleClapton",
   "license": "BSD-3-Clause",
   "private": false,
   "scripts": {
-    "start": "webpack-dev-server --mode development"
+    "start": "webpack-dev-server --mode development",
+    "build": "babel src -d dist --copy-files",
+    "prepublishOnly": "yarn run build"
   },
   "devDependencies": {
+    "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.0",
     "@babel/plugin-proposal-class-properties": "^7.0.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.2",
     "css-loader": "^1.0.0",
     "html-webpack-plugin": "^3.2.0",
     "react": "^16.5.0",

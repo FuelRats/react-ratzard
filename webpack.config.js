@@ -8,6 +8,10 @@ const htmlWebpackPlugin = new HTMLWebpackPlugin({
 
 module.exports = {
   entry: path.resolve('examples', 'src' , 'index.js'),
+  output: {
+    path: path.resolve('examples', 'dist'),
+    filename: 'bundle.js',
+  },
   module: {
     rules: [{
         test: /\.(js|jsx)$/,
