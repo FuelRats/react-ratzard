@@ -29,13 +29,17 @@ const App = () => (
         </div>
 
         {(hasPreviousStep) && (
-          <button onClick={previousStep}>
+          <button
+            onClick={previousStep}
+            type="button">
             Previous
           </button>
         )}
 
         {(hasNextStep) && (
-          <button onClick={nextStep}>
+          <button
+            onClick={nextStep}
+            type="button">
             Next
           </button>
         )}
