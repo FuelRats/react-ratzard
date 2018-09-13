@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { render } from 'react-dom'
 import {
   Step,
@@ -11,13 +11,44 @@ import {
 
 const App = () => (
   <Wizard defaultStep="foo">
-    <Step id="foo">
-      <span>Foo</span>
-    </Step>
+    {({
+      hasNextStep,
+      hasPreviousStep,
+      nextStep,
+      previousStep,
+    }) => (
+      <React.Fragment>
+        <div>
+          <Step id="foo">
+            <span>Step 1: Foo</span>
+          </Step>
 
-    <Step id="bar">
-      <span>Bar</span>
-    </Step>
+          <Step id="bar">
+            <span>Step 2: Bar</span>
+          </Step>
+
+          <Step id="baz">
+            <span>Step 3: Baz</span>
+          </Step>
+        </div>
+
+        {(hasPreviousStep) && (
+          <button
+            onClick={previousStep}
+            type="button">
+            Previous
+          </button>
+        )}
+
+        {(hasNextStep) && (
+          <button
+            onClick={nextStep}
+            type="button">
+            Next
+          </button>
+        )}
+      </React.Fragment>
+    )}
   </Wizard>
 )
 
