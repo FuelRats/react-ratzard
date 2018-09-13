@@ -1,10 +1,17 @@
 {
-  "name": "react-ratzard",
-  "version": "0.1.0",
+  "name": "@fuelrats/react-ratzard",
+  "version": "0.0.1",
   "description": "A simple wizard manager for react",
   "main": "dist/index.js",
   "repository": "https://github.com/FuelRats/react-ratzard.git",
   "author": "UncleClapton",
+  "contributors": [
+    {
+      "name": "Trezy",
+      "email": "tre@trezy.com",
+      "url": "https://trezy.com"
+    }
+  ],
   "license": "BSD-3-Clause",
   "private": false,
   "scripts": {
@@ -29,7 +36,8 @@
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.8"
   },
-  "dependencies": {
-    "babel-loader": "^8.0.2"
+  "peerDependencies": {
+    "react": "^16.5.0",
+    "react-dom": "^16.5.0"
   }
 }
