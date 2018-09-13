@@ -72,30 +72,27 @@ export class Wizard extends Component {
   \***************************************************************************/
 
   addStep = stepID => {
-    const { steps } = this.state
-    const { currentStep } = this.props
-
-    if (steps[stepID]) {
+    if (this.state.steps[stepID]) {
       throw new Error(`Attempting to add duplicate step ID: ${stepID}`)
     }
 
-    const newSteps = [...steps, stepID]
+    this.setState(state => {
+      const {
+        currentStep,
+        steps,
+      } = state
 
-    const wizardHasMoreThanOneStep = newSteps.length > 1
-    const currentStepIsFirstStep = currentStep === newSteps[0]
-    const currentStepIsLastStep = currentStep === newSteps[newSteps.length - 1]
+      const newSteps = [...steps, stepID]
 
-    console.group('Adding step...', stepID)
-    console.log('newSteps', newSteps)
-    console.log('wizardHasMoreThanOneStep', wizardHasMoreThanOneStep)
-    console.log('currentStepIsFirstStep', currentStepIsFirstStep)
-    console.log('currentStepIsLastStep', currentStepIsLastStep)
-    console.groupEnd()
+      const wizardHasMoreThanOneStep = newSteps.length > 1
+      const currentStepIsFirstStep = currentStep === newSteps[0]
+      const currentStepIsLastStep = currentStep === newSteps[newSteps.length - 1]
 
-    this.setState({
-      hasNextStep: wizardHasMoreThanOneStep && !currentStepIsLastStep,
-      hasPreviousStep: wizardHasMoreThanOneStep && currentStepIsFirstStep,
-      steps: newSteps,
+      return {
+        hasNextStep: wizardHasMoreThanOneStep && !currentStepIsLastStep,
+        hasPreviousStep: wizardHasMoreThanOneStep && currentStepIsFirstStep,
+        steps: newSteps,
+      }
     })
   }
 
