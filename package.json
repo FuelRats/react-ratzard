@@ -17,6 +17,7 @@
   "scripts": {
     "start": "webpack-dev-server --mode development",
     "build": "babel src -d dist --copy-files",
+    "commit": "git-cz",
     "prepublishOnly": "yarn run build"
   },
   "devDependencies": {
@@ -28,6 +29,7 @@
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.2",
     "css-loader": "^1.0.0",
+    "cz-conventional-changelog": "^2.1.0",
     "html-webpack-plugin": "^3.2.0",
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
@@ -39,5 +41,10 @@
   "peerDependencies": {
     "react": "^16.5.0",
     "react-dom": "^16.5.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
