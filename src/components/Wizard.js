@@ -96,7 +96,7 @@ export class Wizard extends Component {
     })
   }
 
-  nextStep = () => {
+  goToNextStep = () => {
     const {
       steps,
       currentStep,
@@ -104,10 +104,10 @@ export class Wizard extends Component {
 
     const currentStepIndex = steps.indexOf(currentStep)
 
-    this.setStep(steps[currentStepIndex + 1])
+    this.goToStep(steps[currentStepIndex + 1])
   }
 
-  previousStep = () => {
+  goToPreviousStep = () => {
     const {
       steps,
       currentStep,
@@ -115,7 +115,7 @@ export class Wizard extends Component {
 
     const currentStepIndex = steps.indexOf(currentStep)
 
-    this.setStep(steps[currentStepIndex - 1])
+    this.goToStep(steps[currentStepIndex - 1])
   }
 
   render () {
@@ -126,7 +126,7 @@ export class Wizard extends Component {
     )
   }
 
-  setStep = (stepID, newState = {}) => {
+  goToStep = (stepID, newState = {}) => {
     const {
       onStepChange,
     } = this.props
@@ -163,9 +163,9 @@ export class Wizard extends Component {
     return {
       ...this.state,
       addStep: this.addStep,
-      nextStep: this.nextStep,
-      previousStep: this.previousStep,
-      setStep: this.setStep,
+      goToNextStep: this.goToNextStep,
+      goToPreviousStep: this.goToPreviousStep,
+      goToStep: this.goToStep,
     }
   }
 }

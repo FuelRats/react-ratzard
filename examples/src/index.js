@@ -14,8 +14,8 @@ const App = () => (
     {({
       hasNextStep,
       hasPreviousStep,
-      nextStep,
-      previousStep,
+      goToNextStep,
+      goToPreviousStep,
     }) => (
       <React.Fragment>
         <div>
@@ -34,7 +34,7 @@ const App = () => (
 
         {(hasPreviousStep) && (
           <button
-            onClick={previousStep}
+            onClick={goToPreviousStep}
             type="button">
             Previous
           </button>
@@ -42,7 +42,7 @@ const App = () => (
 
         {(hasNextStep) && (
           <button
-            onClick={nextStep}
+            onClick={goToNextStep}
             type="button">
             Next
           </button>

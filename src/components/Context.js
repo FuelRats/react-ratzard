@@ -10,5 +10,5 @@ export const {
 } = React.createContext({
   currentStep: 0,
   wizardState: {},
-  setStep: () => {},
+  goToStep: () => {},
 })
