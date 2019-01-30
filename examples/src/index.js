@@ -19,7 +19,9 @@ const App = () => (
     }) => (
       <React.Fragment>
         <div>
-          <Step id="foo">
+          <Step
+            id="foo"
+            nextStep="baz">
             <span>Step 1: Foo</span>
           </Step>
 
