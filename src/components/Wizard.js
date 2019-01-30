@@ -30,10 +30,11 @@ export class Wizard extends Component {
 
   /* eslint-disable react/no-unused-state */
   state = {
-    currentStep: this.props.defaultStep || this.steps[0],
+    currentStep: this.props.defaultStep || null,
     hasNextStep: false,
     hasPreviousStep: false,
-    steps: [],
+    steps: {},
+    stepIDs: [],
     wizardState: {},
   }
   /* eslint-enable react/no-unused-state */
@@ -45,6 +46,28 @@ export class Wizard extends Component {
   /***************************************************************************\
     Private Methods
   \***************************************************************************/
+
+  _getStepOrder (state = this.state) {
+    const {
+      stepIDs,
+      steps,
+    } = state
+
+    const stepOrder = [...stepIDs]
+
+    stepOrder.sort((stepAID, stepBID) => {
+      const stepA = steps[stepAID]
+      const stepB = steps[stepBID]
+
+      if (stepA.props.nextStep === stepB.props.id) {
+        return 1
+      }
+
+      return -1
+    })
+
+    return stepOrder
+  }
 
   _renderChildren () {
     const {
@@ -71,72 +94,80 @@ export class Wizard extends Component {
     Public Methods
   \***************************************************************************/
 
-  addStep = stepID => {
-    if (this.state.steps[stepID]) {
+  addStep = (stepID, step) => {
+    if (this.state.stepIDs[stepID]) {
       throw new Error(`Attempting to add duplicate step ID: ${stepID}`)
     }
 
     this.setState(state => {
       const {
         currentStep,
+        stepIDs,
         steps,
       } = state
 
-      const newSteps = [...steps, stepID]
-
-      const wizardHasMoreThanOneStep = newSteps.length > 1
-      const currentStepIsFirstStep = currentStep === newSteps[0]
-      const currentStepIsLastStep = currentStep === newSteps[newSteps.length - 1]
-
-      return {
-        hasNextStep: wizardHasMoreThanOneStep && !currentStepIsLastStep,
-        hasPreviousStep: wizardHasMoreThanOneStep && !currentStepIsFirstStep,
-        steps: newSteps,
+      const newState = {
+        ...state,
+        stepIDs: [...stepIDs, stepID],
+        steps: {
+          ...steps,
+          [stepID]: step,
+        }
       }
+
+      const stepOrder = this._getStepOrder(newState)
+      const wizardHasMoreThanOneStep = newState.stepIDs.length > 1
+
+      const currentStepIsFirstStep = currentStep === stepOrder[0]
+      const currentStepIsLastStep = currentStep === stepOrder[stepOrder.length - 1]
+
+      newState.hasNextStep = wizardHasMoreThanOneStep && !currentStepIsLastStep
+      newState.hasPreviousStep = wizardHasMoreThanOneStep && !currentStepIsFirstStep
+
+      return newState
     })
   }
 
-  nextStep = () => {
+  goToNextStep = () => {
     const {
+      currentStep: currentStepID,
       steps,
-      currentStep,
     } = this.state
 
-    const currentStepIndex = steps.indexOf(currentStep)
+    const currentStep = steps[currentStepID]
 
-    this.setStep(steps[currentStepIndex + 1])
+    if (currentStep.props.nextStep) {
+      this.goToStep(currentStep.props.nextStep)
+    } else {
+      const stepOrder = this._getStepOrder()
+      const currentStepIndex = stepOrder.indexOf(currentStep)
+
+      this.goToStep(stepOrder[currentStepIndex + 1])
+    }
   }
 
-  previousStep = () => {
-    const {
-      steps,
-      currentStep,
-    } = this.state
+  goToPreviousStep = () => {
+    const { currentStep } = this.state
 
-    const currentStepIndex = steps.indexOf(currentStep)
+    const stepOrder = this._getStepOrder()
+    const currentStepIndex = stepOrder.indexOf(currentStep)
 
-    this.setStep(steps[currentStepIndex - 1])
+    this.goToStep(stepOrder[currentStepIndex - 1])
   }
 
-  render () {
-    return (
-      <Provider value={this.passthroughState}>
-        {this._renderChildren()}
-      </Provider>
-    )
-  }
-
-  setStep = (stepID, newState = {}) => {
+  goToStep = (stepID, newState = {}) => {
     const {
       onStepChange,
     } = this.props
     const {
-      steps,
+      stepIDs,
     } = this.state
 
-    const wizardHasMoreThanOneStep = steps.length > 1
-    const currentStepIsFirstStep = stepID === steps[0]
-    const currentStepIsLastStep = stepID === steps[steps.length - 1]
+    const stepOrder = this._getStepOrder()
+    const wizardHasMoreThanOneStep = stepOrder.length > 1
+
+    const currentStepIsFirstStep = stepID === stepOrder[0]
+    const currentStepIsLastStep = stepID === stepOrder[stepOrder.length - 1]
 
     this.setState(state => ({
       currentStep: stepID,
@@ -151,6 +182,14 @@ export class Wizard extends Component {
     })
   }
 
+  render () {
+    return (
+      <Provider value={this.passthroughState}>
+        {this._renderChildren()}
+      </Provider>
+    )
+  }
+
 
 
 
@@ -163,9 +202,9 @@ export class Wizard extends Component {
     return {
       ...this.state,
       addStep: this.addStep,
-      nextStep: this.nextStep,
-      previousStep: this.previousStep,
-      setStep: this.setStep,
+      goToNextStep: this.goToNextStep,
+      goToPreviousStep: this.goToPreviousStep,
+      goToStep: this.goToStep,
     }
   }
 }

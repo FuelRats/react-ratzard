@@ -68,7 +68,7 @@ export class InternalStep extends Component {
       id,
     } = props
 
-    addStep(id)
+    addStep(id, this)
   }
 
   render () {
